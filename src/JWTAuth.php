@@ -50,22 +50,32 @@ class JWTAuth extends JWT
         return $this->fromUser($this->user());
     }
 
-    /**
+/**
      * Authenticate a user via a token.
      *
-     * @return \Tymon\JWTAuth\Contracts\JWTSubject|false
+     * @param mixed $token
+     *
+     * @return mixed
      */
-    public function authenticate()
-    {
-        $id = $this->getPayload()->get('sub');
-
-        if (! $this->auth->byId($id)) {
-            return false;
+    public function authenticate($token = false) {
+        $device = $this->getPayload($token)->get('device');
+        if ($device == 'mobile') {
+            $mobile = $this->getPayload($token)->get('mobile');
+            $user = UserModel::where('mobile', $mobile)->first();
+            if (!$user) {
+                return false;
+            }
+            return $user->mobile;
+        } else {
+            $email = $this->getPayload($token)->get('email');
+            $password = $this->getPayload($token)->get('password');
+            $user = UserModel::where('email', $email)->where('password', $password)->first();
+            if (!$user) {
+                return false;
+            }
+            return $user;
         }
-
-        return $this->user();
     }
-
     /**
      * Alias for authenticate().
      *
