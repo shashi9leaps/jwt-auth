@@ -112,22 +112,31 @@ class JWTAuth
         return $this->fromUser($this->auth->user(), $customClaims);
     }
 
-    /**
+/**
      * Authenticate a user via a token.
      *
      * @param mixed $token
      *
      * @return mixed
      */
-    public function authenticate($token = false)
-    {
-        $id = $this->getPayload($token)->get('sub');
-
-        if (! $this->auth->byId($id)) {
-            return false;
+    public function authenticate($token = false) {
+        $device = $this->getPayload($token)->get('device');
+        if ($device == 'mobile') {
+            $mobile = $this->getPayload($token)->get('mobile');
+            $user = UserModel::where('mobile', $mobile)->first();
+            if (!$user) {
+                return false;
+            }
+            return $user->mobile;
+        } else {
+            $email = $this->getPayload($token)->get('email');
+            $password = $this->getPayload($token)->get('password');
+            $user = UserModel::where('email', $email)->where('password', $password)->first();
+            if (!$user) {
+                return false;
+            }
+            return $user;
         }
-
-        return $this->auth->user();
     }
 
     /**
