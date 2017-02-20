@@ -11,7 +11,7 @@
 
 namespace Tymon\JWTAuth;
 
-use App\UserModel;
+use App\Models\UserModel;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Providers\Auth\AuthInterface;
