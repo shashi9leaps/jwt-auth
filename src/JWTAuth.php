@@ -11,6 +11,7 @@
 
 namespace Tymon\JWTAuth;
 
+use App\Models\UserModel;
 use Tymon\JWTAuth\Http\Parser\Parser;
 use Tymon\JWTAuth\Contracts\Providers\Auth;
 
