@@ -70,7 +70,7 @@ class JWTAuth extends JWT
         } else {
             $email = $this->getPayload($token)->get('email');
             $password = $this->getPayload($token)->get('password');
-            $user = UserModel::where('email', $email)->where('password', $password)->first();
+            $user = UserModel::where('email', $email)->first();
             if (!$user) {
                 return false;
             }
